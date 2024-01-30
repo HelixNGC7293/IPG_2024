@@ -89,8 +89,7 @@ public class CardManager : MonoBehaviour
 				//Start point
 				cardTrans.anchoredPosition3D = new Vector3(600, 0, 0);
 
-				card.Init(cardProperty);
-				card.cardManager = this;
+				card.Init(cardProperty, this);
 
 				//Add the controller to cards_Hand
 				cards_Hand.Add(card);

@@ -18,8 +18,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	public RectTransform rectTrans;
 
 	//Card Manager
-	[HideInInspector]
-	public CardManager cardManager;
+	private CardManager cardManager;
 
 	//Hovering and Selecting Scale / Position changes
 	[SerializeField]
@@ -55,9 +54,10 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 		Invoke("AllowSelect", 1);
 	}
 
-	public void Init(CardProperty cP)
+	public void Init(CardProperty cP, CardManager cM)
 	{
 		//Setup card UIs
+		cardManager = cM;
 		cardProperty = cP;
 		cardArt.sprite = cP.art;
 		text_CardName.text = cP.name;
