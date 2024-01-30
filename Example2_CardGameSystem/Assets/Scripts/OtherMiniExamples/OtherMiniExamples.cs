@@ -115,9 +115,23 @@ public class OtherMiniExamples : MonoBehaviour
         string message = (score >= 90) ? "Excellent!" : "Try harder.";
         Debug.Log(message);
 
-        
 
-    }
+		//***Example I
+		int id = 0;
+        string resultSwitch = "";
+        switch (id)
+        {
+            case 0:
+				resultSwitch = "OK";
+                break;
+            case 1:
+				resultSwitch = "Nice";
+                break;
+            default:
+				resultSwitch = "bad";
+                break;
+		}
+		Debug.Log(resultSwitch);
 
-
+	}
 }
