@@ -27,6 +27,8 @@ namespace Eddy.CharacterPack
 		Transform mainBody;
 		[SerializeField]
 		Animator anim;
+		[SerializeField]
+		float hungrySpeed = 35f;
 
 		Transform mainCamera;
 
@@ -65,7 +67,7 @@ namespace Eddy.CharacterPack
 			{
 				if (HungryValue > 0)
 				{
-					HungryValue -= 10f * Time.deltaTime;
+					HungryValue -= hungrySpeed * Time.deltaTime;
 					//Display UI
 					if (HungryValue < HungryValueTotal / 2)
 					{

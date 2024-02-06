@@ -87,7 +87,7 @@ public class CardManager : MonoBehaviour
 				RectTransform cardTrans = card.GetComponent<RectTransform>();
 				cardTrans.SetParent(cardGroup);
 				//Start point
-				cardTrans.anchoredPosition3D = new Vector3(600, 0, 0);
+				cardTrans.anchoredPosition = new Vector3(600, 0);
 
 				card.Init(cardProperty, this);
 
@@ -252,7 +252,6 @@ public class CardManager : MonoBehaviour
 						print("Applying Normal Card");
 						break;
 				}
-
 				//This card is used
 				//Add this card to the discard pile
 				MoveCardToDiscardPile(currentSelectedCard);
