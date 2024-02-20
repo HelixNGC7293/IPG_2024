@@ -43,18 +43,26 @@ public class Player : MonoBehaviour
 
             Vector3 move = transform.rotation * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-            if (charController.isGrounded && currentYVelocity < 0)
+            if (charController.isGrounded)
             {
-                currentYVelocity = 0f;
-            }
+                // Changes the height position of the player
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    currentYVelocity += Mathf.Sqrt(2 * jumpHeight * gravityValue);
+                }
+                else
+				{
+					//currentYVelocity = 0f;
 
-            // Changes the height position of the player..
-            if (Input.GetKeyDown(KeyCode.Space) && charController.isGrounded)
-            {
-                currentYVelocity += Mathf.Sqrt(2 * jumpHeight * gravityValue);
+                    //-0.5f kinda makes the character less sticky on the ground
+					currentYVelocity = -0.5f;
+				}
             }
-            move.y = currentYVelocity;
-            currentYVelocity += gravityValue * Time.deltaTime;
+            else
+			{
+				currentYVelocity += gravityValue * Time.deltaTime;
+			}
+			move.y = currentYVelocity;
 
             charController.Move(move * Time.deltaTime * speed);
         }
