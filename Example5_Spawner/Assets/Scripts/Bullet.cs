@@ -57,7 +57,7 @@ public class Bullet : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (!isBulletTriggered && !other.CompareTag("Player") && !other.CompareTag("Bullet"))
+		if (!isBulletTriggered && !other.CompareTag("Player") && !other.CompareTag("Bullet") && !other.CompareTag("MovingPlatform"))
         {
             BulletTriggered();
 			if (other.CompareTag("Enemy"))
