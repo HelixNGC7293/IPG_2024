@@ -168,9 +168,22 @@ public class GameManager : MonoBehaviour
             decreasedNum = Mathf.Min(PlayerNum, PlayerNum - formulaResult);
         }
 
-        //Change PlayerNum
-        PlayerNum = formulaResult;
+
+		//Change PlayerNum
+		PlayerNum = formulaResult;
 
         return decreasedNum;
     }
+
+    [System.Serializable]
+	public struct Potion
+	{
+		public int id;
+		public string name;
+		public int remainingUseTimes;
+	}
+
+    [SerializeField]
+    Potion[] potion;
+
 }
