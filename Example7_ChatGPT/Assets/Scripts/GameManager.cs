@@ -68,12 +68,12 @@ public class GameManager : MonoBehaviour
                     message += "}";
                 }
             }
+            message = message.Replace("\\", "\\\\");
             NPCJSONReceiver npcJSON = JsonUtility.FromJson<NPCJSONReceiver>(message);
             string talkLine = npcJSON.reply_to_player;
             tX_AIReply.text = "<color=#ff7082>" + npcName + ": </color>" + talkLine;
 
             npc.ShowAnimation(npcJSON.animation_name);
-
         }
         catch (Exception e)
         {
