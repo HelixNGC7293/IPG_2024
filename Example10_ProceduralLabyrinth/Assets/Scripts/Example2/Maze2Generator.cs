@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class Maze2Generator : MonoBehaviour
 {
-    [SerializeField]
+	//Prefab database
+	[SerializeField]
     PrefabDatabase prefabDB;
-    [SerializeField]
+	//Map size
+	[SerializeField]
     int mazeX = 59;
     [SerializeField]
     int mazeY = 59;
-    [SerializeField]
+	//Container
+	[SerializeField]
     Transform mazeGroup;
 
-    Maze2Cell[,] mazeCellMap;
+	//Prefab instances 2D array
+	Maze2Cell[,] mazeCellMap;
 
-    List<Maze2Cell> unvisitCells = new List<Maze2Cell>();
+	//List for Prim's algorithm
+	List<Maze2Cell> unvisitCells = new List<Maze2Cell>();
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +48,9 @@ public class Maze2Generator : MonoBehaviour
 
         Maze2Cell startCell = mazeCellMap[1, 1];
         unvisitCells.Add(startCell);
-        RecursiveRandomPrim(startCell);
+
+		//Start Recursive at cell [1,1] ([0,0] is a wall)
+		RecursiveRandomPrim(startCell);
     }
 
     void RecursiveRandomPrim(Maze2Cell startCell)
@@ -52,9 +59,10 @@ public class Maze2Generator : MonoBehaviour
         if (!startCell.isVisited)
         {
             startCell.isVisited = true;
+            //This cell will not be a wall cell
             startCell.wall.SetActive(false);
 
-            //Instant relink from main path
+            //Instant connect from main path, hide the wall cell in between
             if (startCell.tunnelDirection == Maze2TunnelDirectionIndicator.Right)
             {
                 mazeCellMap[startCell.locX - 1, startCell.locY].wall.SetActive(false);
@@ -72,14 +80,13 @@ public class Maze2Generator : MonoBehaviour
                 mazeCellMap[startCell.locX, startCell.locY - 1].wall.SetActive(false);
             }
 
-            //Standard connection
-
+            //Standard connection, check unvisited cells nearby start cell
             List<Maze2Cell> neighborUnvisitedCells = CheckCellSurroundings(startCell);
 
 
             if (neighborUnvisitedCells.Count > 0)
             {
-                //Connect to the nearby unvisit cell
+                //Connect to one of the nearby unvisit cells
                 Maze2Cell endCell = neighborUnvisitedCells[Random.Range(0, neighborUnvisitedCells.Count)];
                 endCell.isVisited = true;
                 endCell.wall.SetActive(false);
@@ -104,15 +111,16 @@ public class Maze2Generator : MonoBehaviour
                 //Remove visited endCell from unvisited cell list
                 neighborUnvisitedCells.Remove(endCell);
 
-                //Get all unvisited cells around startCell & endCell
-                unvisitCells.AddRange(neighborUnvisitedCells);
+				//Get all unvisited cells around startCell & endCell and add to the unvisitCells list
+				unvisitCells.AddRange(neighborUnvisitedCells);
+                //Since end cell is also changed to visited status, add unvisited cells nearby end cell as well
                 unvisitCells.AddRange(CheckCellSurroundings(endCell));
 
             }
         }
         if (unvisitCells.Count > 0)
         {
-            //As long as there is cell in the list
+            //As long as there is unvisited cell in the list, keep the recursive progress
             //Randomly choose one cell and continue
             RecursiveRandomPrim(unvisitCells[Random.Range(0, unvisitCells.Count)]);
         }
@@ -131,6 +139,7 @@ public class Maze2Generator : MonoBehaviour
     {
         List<Maze2Cell> neighborUnvisitedCells = new List<Maze2Cell>();
 
+        //Check if surrounding cells are unvisited and add them to the list, skip over the wall cell (-2/+2)
         if (cell.locX - 2 > 0)
         {
             Maze2Cell checkingNeighborCell = mazeCellMap[cell.locX - 2, cell.locY];

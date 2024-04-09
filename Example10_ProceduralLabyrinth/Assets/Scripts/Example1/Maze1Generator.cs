@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class Maze1Generator : MonoBehaviour
 {
+    //Prefab database
     [SerializeField]
     PrefabDatabase prefabDB;
+    //Map size
     [SerializeField]
     int mazeX = 20;
     [SerializeField]
     int mazeY = 20;
+    //Container
     [SerializeField]
     Transform mazeGroup;
 
+    //Prefab instances 2D array
     Maze1Cell[,] mazeCellMap;
 
-    Stack<Maze1Cell> pathFindingCells = new Stack<Maze1Cell>();
+	//Stack for Recursive backtracker
+	Stack<Maze1Cell> pathFindingCells = new Stack<Maze1Cell>();
 
     // Start is called before the first frame update
     void Start()
@@ -40,13 +45,16 @@ public class Maze1Generator : MonoBehaviour
                 cell.Init(x, y);
             }
         }
-        RecursiveBacktracking(mazeCellMap[Random.Range(0, mazeX), Random.Range(0, mazeY)]);
+
+		//Start Recursive with a random cell
+		RecursiveBacktracking(mazeCellMap[Random.Range(0, mazeX), Random.Range(0, mazeY)]);
     }
 
     void RecursiveBacktracking(Maze1Cell selectedCell)
     {
         selectedCell.isVisited = true;
         List<Maze1Cell> neighborUnvisitedCells = new List<Maze1Cell>();
+        //Get unvisited list for selected cell's surroundings
         if (selectedCell.locX - 1 >= 0)
         {
             Maze1Cell checkingNeighborCell = mazeCellMap[selectedCell.locX - 1, selectedCell.locY];
@@ -80,32 +88,39 @@ public class Maze1Generator : MonoBehaviour
             }
         }
 
+        //There is unvisited cell
         if(neighborUnvisitedCells.Count > 0)
         {
             //Connect to the nearby unvisit cell
             Maze1Cell nextSelectedCell = neighborUnvisitedCells[Random.Range(0, neighborUnvisitedCells.Count)];
             if(nextSelectedCell.locX < selectedCell.locX)
 			{
-                nextSelectedCell.walls[0].SetActive(false);
+				//nextSelectedCell L + selectedCell R
+				nextSelectedCell.walls[0].SetActive(false);
                 selectedCell.walls[1].SetActive(false);
             }
             else if (nextSelectedCell.locX > selectedCell.locX)
-            {
-                nextSelectedCell.walls[1].SetActive(false);
+			{
+				//nextSelectedCell R + selectedCell L
+				nextSelectedCell.walls[1].SetActive(false);
                 selectedCell.walls[0].SetActive(false);
             }
             else if (nextSelectedCell.locY < selectedCell.locY)
-            {
-                nextSelectedCell.walls[3].SetActive(false);
+			{
+				//nextSelectedCell D + selectedCell U
+				nextSelectedCell.walls[3].SetActive(false);
                 selectedCell.walls[2].SetActive(false);
             }
             else if (nextSelectedCell.locY > selectedCell.locY)
-            {
-                nextSelectedCell.walls[2].SetActive(false);
+			{
+				//nextSelectedCell U + selectedCell D
+				nextSelectedCell.walls[2].SetActive(false);
                 selectedCell.walls[3].SetActive(false);
             }
             //Push current selected cell into the stack, move the pointer to the next nearby cell
             pathFindingCells.Push(selectedCell);
+
+            //Keep recursive process for the next selected cell
             RecursiveBacktracking(nextSelectedCell);
         }
         else if(pathFindingCells.Count > 0)
@@ -114,7 +129,9 @@ public class Maze1Generator : MonoBehaviour
             //Pop up the last one
             //Roll back to last cell along the path
             Maze1Cell nextSelectedCell = pathFindingCells.Pop();
-            RecursiveBacktracking(nextSelectedCell);
+
+			//Keep recursive process for the next selected cell
+			RecursiveBacktracking(nextSelectedCell);
         }
         else
         {
