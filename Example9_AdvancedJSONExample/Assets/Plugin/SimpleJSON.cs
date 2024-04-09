@@ -110,6 +110,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace SimpleJSON
 {
@@ -128,6 +129,19 @@ namespace SimpleJSON
 	{
 		Compact,
 		Indent
+	}
+	IEnumerator MyCoroutine(Action callback)
+	{
+		// Do some stuff here before the callback
+		yield return new WaitForSeconds(1); // Wait for 1 second
+
+		// Call the callback function
+		callback?.Invoke();
+
+		// Continue doing stuff after the callback
+		yield return new WaitForSeconds(1); // Wait for another second
+
+		// More code here if needed
 	}
 
 	public abstract partial class JSONNode
