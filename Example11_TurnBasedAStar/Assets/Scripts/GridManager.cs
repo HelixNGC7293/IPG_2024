@@ -19,6 +19,7 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     Character character;
 
+    //Map list
     List<GridUnit> gridUnitList = new List<GridUnit>();
 
     [HideInInspector]
@@ -26,6 +27,7 @@ public class GridManager : MonoBehaviour
     [HideInInspector]
     public GridUnit currentAvailableMoveTarget;
 
+    //Game map
     int[,] mapData = {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     { 0, 1, 0, 0, 0, 0, 2, 0, 0, 0 },
@@ -37,6 +39,7 @@ public class GridManager : MonoBehaviour
 
 	private void Awake()
 	{
+        //Singleton
 		if(instance == null)
 		{
             instance = this;
@@ -82,12 +85,15 @@ public class GridManager : MonoBehaviour
         switch (tileType)
         {
             case 0:
+                //Grass
                 cost = 1;
                 break;
             case 1:
+                //Forest
                 cost = 2;
                 break;
             case 2:
+                //Rock, no way to pass. Worked for blocked nodes
                 cost = 99;
                 break;
         }
