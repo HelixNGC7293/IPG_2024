@@ -79,6 +79,7 @@ public class GridManager : MonoBehaviour
         CalculatePathfinding(character.currentLocation, targetLocation, character.actionPoint);
     }
 
+    //Get individual tile type cost
     int GetCost(int tileType)
 	{
         int cost = 0;
@@ -103,7 +104,8 @@ public class GridManager : MonoBehaviour
 
     private int GetDistance(GridUnit a, GridUnit b)
     {
-        int distX = Mathf.Abs(a.x - b.x);
+		//Use manhattan distance formula to calculate H cost (heuristic cost)
+		int distX = Mathf.Abs(a.x - b.x);
         int distY = Mathf.Abs(a.y - b.y);
 
         if (distX > distY)
@@ -112,7 +114,10 @@ public class GridManager : MonoBehaviour
         }
         return distY;
     }
-    private List<GridUnit> GetNeighbors(GridUnit gridUnit)
+
+
+	//Get all neighbor tiles
+	private List<GridUnit> GetNeighbors(GridUnit gridUnit)
     {
         List<GridUnit> neighbors = new List<GridUnit>();
         int mapX = mapData.GetLength(1);
@@ -137,6 +142,8 @@ public class GridManager : MonoBehaviour
 
         return neighbors;
     }
+
+    //When click on the character, calculate the range for the reachable area
     public List<GridUnit> CalculateReachableGrids(GridUnit startLocation, int actionPoint)
     {
         List<GridUnit> reachableGrids = new List<GridUnit>();
@@ -162,6 +169,7 @@ public class GridManager : MonoBehaviour
                 {
                     int newCost = cost + GetCost(neighbor.tileType);
 
+                    //Add neighbor tiles into the queue, as long as: 1. It's not visited; 2.Overall cost is lower than actionPoint; 3.Not the obstacle tiles
                     if (!visited.Contains(neighbor) && newCost <= actionPoint && neighbor.tileType != 2)
                     {
                         queue.Enqueue((neighbor, newCost));
@@ -174,6 +182,7 @@ public class GridManager : MonoBehaviour
         return reachableGrids;
     }
 
+    //When click on the target location, try to find the shortest path
     public void CalculatePathfinding(GridUnit startLocation, GridUnit targetLocation, int actionPoint)
     { 
         // Create the open list containing the start node and closed set
